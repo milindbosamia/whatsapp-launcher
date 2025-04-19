@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Send WhatsApp Message</title>
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      max-width: 400px;
+      width: 90%;
+      box-sizing: border-box;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      line-height: 1.4;
+      color: #25d366;
+      margin-bottom: 1.5rem;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-sizing: border-box;
+      font-size: 1rem;
+      resize: none;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: -0.8rem;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      background-color: #25d366;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: teal;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">Send Message via<br/>WhatsApp</div>
+    <input type="text" id="phone" placeholder="Enter number with country code" />
+    <div id="error" class="error" style="display: none;">Please enter a valid number with country code (numbers only, no letters/characters)</div>
+    <textarea id="message" rows="4" placeholder="Write your message (optional)"></textarea>
+    <button id="sendBtn">Open WhatsApp Web/App</button>
+  </div>
+
+  <script>
+    const sendBtn = document.getElementById("sendBtn");
+    const phoneInput = document.getElementById("phone");
+    const messageInput = document.getElementById("message");
+    const error = document.getElementById("error");
+
+    function isMobile() {
+      return /Mobi|Android|iPhone/i.test(navigator.userAgent);
+    }
+
+    sendBtn.addEventListener("click", () => {
+      const phone = phoneInput.value.trim();
+      const message = encodeURIComponent(messageInput.value.trim());
+
+      if (!/^\d+$/.test(phone)) {
+        error.style.display = "block";
+        return;
+      }
+
+      error.style.display = "none";
+      const baseUrl = isMobile()
+        ? "https://wa.me/"
+        : "https://web.whatsapp.com/send?phone=";
+
+      const fullUrl = message
+        ? `${baseUrl}${phone}&text=${message}`
+        : `${baseUrl}${phone}`;
+
+      window.open(fullUrl, "_blank");
+    });
+  </script>
+</body>
+</html>
